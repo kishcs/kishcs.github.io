@@ -436,6 +436,31 @@
     }
     .reveal.visible { opacity: 1; transform: none; }
 
+    /* ── LIGHT THEME ── */
+    html[data-theme="light"] {
+      --bg:       #f5f7fa;
+      --surface:  #ffffff;
+      --surface2: #eaecf0;
+      --border:   rgba(0,0,0,.1);
+      --text:     #1a1d24;
+      --muted:    #5c6070;
+    }
+    html[data-theme="light"] nav { background: rgba(245,247,250,.92); }
+    html[data-theme="light"] .avatar-img { background: linear-gradient(135deg, #ddddf5, #c8c8e8); }
+    html[data-theme="light"] .avatar-ring::after { background: var(--bg); }
+    html[data-theme="light"] .form-group input,
+    html[data-theme="light"] .form-group textarea { background: var(--surface); color: var(--text); }
+
+    /* ── THEME TOGGLE ── */
+    .theme-toggle {
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 8px; width: 36px; height: 36px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; color: var(--muted); transition: var(--transition);
+      font-size: .85rem; flex-shrink: 0;
+    }
+    .theme-toggle:hover { color: var(--accent); border-color: var(--accent); }
+
     @media (max-width: 768px) {
       .nav-links { display: none; flex-direction: column; }
       .nav-links.open {
@@ -469,6 +494,7 @@
       <li><a href="#projects">Projects</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme"><i class="fa-solid fa-sun"></i></button>
     <div class="hamburger" id="hamburger" aria-label="Toggle menu" role="button" tabindex="0">
       <span></span><span></span><span></span>
     </div>
@@ -776,6 +802,26 @@
   </footer>
 
   <script>
+    const themeToggle = document.getElementById('themeToggle');
+    const toggleIcon  = themeToggle.querySelector('i');
+    const savedTheme  = localStorage.getItem('ks-theme') || 'dark';
+    if (savedTheme === 'light') {
+      document.documentElement.setAttribute('data-theme', 'light');
+      toggleIcon.className = 'fa-solid fa-moon';
+    }
+    themeToggle.addEventListener('click', () => {
+      const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+      if (isLight) {
+        document.documentElement.removeAttribute('data-theme');
+        toggleIcon.className = 'fa-solid fa-sun';
+        localStorage.setItem('ks-theme', 'dark');
+      } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+        toggleIcon.className = 'fa-solid fa-moon';
+        localStorage.setItem('ks-theme', 'light');
+      }
+    });
+
     const hamburger = document.getElementById('hamburger');
     const navLinks  = document.getElementById('navLinks');
     hamburger.addEventListener('click', () => navLinks.classList.toggle('open'));
