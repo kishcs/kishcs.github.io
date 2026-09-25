@@ -356,6 +356,40 @@
     }
     .footer-logo { color: var(--accent); font-weight: 600; }
 
+    /* ── LIGHT THEME ── */
+    html[data-theme="light"] {
+      --bg:       #f6f8fa;
+      --surface:  #ffffff;
+      --surface2: #eef1f5;
+      --surface3: #e1e5ea;
+      --border:   rgba(208,215,222,1);
+      --accent:   #0077b6;
+      --accent2:  #005f94;
+      --green:    #1a7f37;
+      --orange:   #bc4c00;
+      --text:     #1f2328;
+      --muted:    #57606a;
+    }
+    html[data-theme="light"] nav { background: rgba(246,248,250,.92); }
+    html[data-theme="light"] .btn-accent { color: #fff; }
+    html[data-theme="light"] .hero-eyebrow::before { background: var(--green); }
+    html[data-theme="light"] .availability .dot { background: var(--green); }
+    html[data-theme="light"] .exp-node { background: var(--accent); }
+    html[data-theme="light"] .term-card,
+    html[data-theme="light"] .term-bar { background: #1c2330; border-color: rgba(48,54,61,1); }
+    html[data-theme="light"] .term-bar { border-bottom-color: rgba(48,54,61,1); }
+    html[data-theme="light"] .term-title { color: #7d8590; }
+
+    /* ── THEME TOGGLE ── */
+    .theme-toggle {
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 8px; width: 34px; height: 34px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; color: var(--muted); transition: var(--t);
+      font-size: .85rem; flex-shrink: 0;
+    }
+    .theme-toggle:hover { color: var(--accent); border-color: var(--accent); }
+
     /* ── RESPONSIVE ── */
     @media(max-width:768px){
       .nav-links{display:none;flex-direction:column}
@@ -390,6 +424,7 @@
     <li><a href="#education">education</a></li>
     <li><a href="#contact">contact</a></li>
   </ul>
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme"><i class="fa-solid fa-sun"></i></button>
   <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
 </nav>
 
@@ -799,6 +834,26 @@
 </footer>
 
 <script>
+  const themeToggle = document.getElementById('themeToggle');
+  const toggleIcon  = themeToggle.querySelector('i');
+  const savedTheme  = localStorage.getItem('spb-theme') || 'dark';
+  if (savedTheme === 'light') {
+    document.documentElement.setAttribute('data-theme', 'light');
+    toggleIcon.className = 'fa-solid fa-moon';
+  }
+  themeToggle.addEventListener('click', () => {
+    const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+    if (isLight) {
+      document.documentElement.removeAttribute('data-theme');
+      toggleIcon.className = 'fa-solid fa-sun';
+      localStorage.setItem('spb-theme', 'dark');
+    } else {
+      document.documentElement.setAttribute('data-theme', 'light');
+      toggleIcon.className = 'fa-solid fa-moon';
+      localStorage.setItem('spb-theme', 'light');
+    }
+  });
+
   const hamburger = document.getElementById('hamburger');
   const navLinks  = document.getElementById('navLinks');
   hamburger.addEventListener('click', () => navLinks.classList.toggle('open'));
